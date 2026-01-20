@@ -15,90 +15,152 @@ html, body {
   overflow: hidden;
 }
 
+/* Container pro scrollování */
 .scroll-container {
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   overflow-y: scroll;
+  scroll-behavior: smooth;
 }
 
-/* fullscreen videa */
+/* obě videa fullscreen */
 video {
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
+  background: black;
 }
 
+/* web video je schované + fade */
 #web {
   opacity: 0;
   transition: opacity 600ms ease;
 }
 
-/* ===== GALERIE ===== */
-
+/* kontejner pro obrázky - ZMĚNA: v dolní části obrazovky */
 .image-container {
   position: absolute;
-  top: 80vh;
+  top: 80vh; /* 80% výšky místo 150vh - viditelné bez scrollování */
+  left: 0;
   width: 100%;
   display: flex;
   justify-content: center;
-  gap: 80px;
-  padding: 60px 0;
-  z-index: 10;
-
+  align-items: center;
+  gap: 60px;
+  padding: 80px 0;
   opacity: 0;
-  transform: translateY(80px);
-  transition:
-    transform 700ms cubic-bezier(.22,.61,.36,1),
-    opacity 700ms ease;
-
   pointer-events: none;
+  z-index: 10;
+  min-height: 50vh;
 }
 
 .image-container.visible {
   opacity: 1;
-  transform: translateY(0);
   pointer-events: auto;
 }
 
 .image-item {
-  width: 300px;
-  height: 300px;
+  width: 280px; /* VĚTŠŠÍ: 280px místo 220px */
+  height: 280px; /* VĚTŠŠÍ: 280px místo 220px */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform: translateY(60px); /* Větší posun */
   opacity: 0;
-  transform: translateY(40px) scale(0.92);
-  transition:
-    opacity 700ms ease,
-    transform 700ms cubic-bezier(.22,.61,.36,1);
+  transition: transform 700ms ease, opacity 700ms ease;
 }
 
 .image-container.visible .image-item {
+  transform: translateY(0);
   opacity: 1;
-  transform: translateY(0) scale(1.05);
 }
 
-/* stagger */
-.image-container.visible .image-item:nth-child(1) { transition-delay: 0ms; }
-.image-container.visible .image-item:nth-child(2) { transition-delay: 120ms; }
-.image-container.visible .image-item:nth-child(3) { transition-delay: 240ms; }
+/* Zpoždění pro postupný vstup obrázků */
+.image-container.visible .image-item:nth-child(1) {
+  transition-delay: 200ms;
+}
+.image-container.visible .image-item:nth-child(2) {
+  transition-delay: 400ms;
+}
+.image-container.visible .image-item:nth-child(3) {
+  transition-delay: 600ms;
+}
 
 .image-item img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  border-radius: 14px;
-  transition: transform 300ms ease;
+  object-fit: contain;
+  border-radius: 15px;
+  filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.5));
+  transition: transform 400ms ease;
+  transform: scale(1.1); /* VĚTŠÍ SCALE: 1.1 místo 1 */
 }
 
 .image-item img:hover {
-  transform: scale(1.08);
+  transform: scale(1.18); /* VĚTŠÍ HOVER: 1.18 místo 1.08 */
+}
+
+/* NOVÝ ANIMOVANÝ INDIKÁTOR */
+.indicator-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  padding-bottom: 40px;
+  z-index: 20;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: transform 700ms ease, opacity 700ms ease;
+}
+
+.indicator-container.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.scroll-indicator {
+  color: white;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 12px 24px;
+  border-radius: 25px;
+  pointer-events: none;
+}
+
+/* Animace šipky */
+.arrow {
+  display: inline-block;
+  margin-left: 8px;
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-5px);
+  }
+  60% {
+    transform: translateY(-3px);
+  }
 }
 </style>
 </head>
 
 <body>
 
-<div class="scroll-container">
+<div class="scroll-container" id="scrollContainer">
   <video id="intro" autoplay muted playsinline>
     <source src="introvid.mp4" type="video/mp4">
   </video>
@@ -107,27 +169,62 @@ video {
     <source src="web.mp4" type="video/mp4">
   </video>
 
+  <!-- Kontejner pro obrázky -->
   <div class="image-container" id="imageContainer">
-    <div class="image-item"><img src="ukazky/obrazek1.png"></div>
-    <div class="image-item"><img src="ukazky/obrazek2.png"></div>
-    <div class="image-item"><img src="ukazky/obrazek3.png"></div>
+    <div class="image-item">
+      <img src="ukazky/obrazek1.png" alt="Obrázek 1">
+    </div>
+    <div class="image-item">
+      <img src="ukazky/obrazek2.png" alt="Obrázek 2">
+    </div>
+    <div class="image-item">
+      <img src="ukazky/obrazek3.png" alt="Obrázek 3">
+    </div>
+  </div>
+</div>
+
+<!-- NOVÝ ANIMOVANÝ INDIKÁTOR -->
+<div class="indicator-container" id="indicatorContainer">
+  <div class="scroll-indicator">
+    Scrolluj dolů pro více <span class="arrow">↓</span>
   </div>
 </div>
 
 <script>
 const intro = document.getElementById("intro");
 const web = document.getElementById("web");
-const images = document.getElementById("imageContainer");
+const imageContainer = document.getElementById("imageContainer");
+const scrollContainer = document.getElementById("scrollContainer");
+const indicatorContainer = document.getElementById("indicatorContainer");
 
 intro.addEventListener("ended", () => {
   web.play();
   web.style.opacity = "1";
   intro.remove();
-
-  // 🔥 animace obrázků 800 ms po STARTU web.mp4
+  
+  // Zobrazit obrázky po 800ms po startu web videa
   setTimeout(() => {
-    images.classList.add("visible");
-  }, 800);
+    imageContainer.classList.add("visible");
+    indicatorContainer.classList.add("visible");
+  }, 800); // 800ms po startu web videa
+});
+
+// Automatické scrollování po kliknutí na indikátor
+indicatorContainer.addEventListener('click', () => {
+  scrollContainer.scrollTo({
+    top: imageContainer.offsetTop + 100,
+    behavior: 'smooth'
+  });
+});
+
+// Scrollování na obrázky při jakémkoli kliknutí po zobrazení indikátoru
+document.addEventListener('click', (e) => {
+  if (indicatorContainer.classList.contains('visible') && e.target !== indicatorContainer && !indicatorContainer.contains(e.target)) {
+    scrollContainer.scrollTo({
+      top: imageContainer.offsetTop + 100,
+      behavior: 'smooth'
+    });
+  }
 });
 </script>
 
