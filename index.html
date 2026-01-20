@@ -1,10 +1,33 @@
 <!DOCTYPE html>
 <html lang="cs">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Web</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
+<title>Web</title>
+
+<style>
+html, body {
+  margin: 0;
+  padding: 0;
+  background: black;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+video {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+#web {
+  opacity: 0;
+  transition: opacity 600ms ease;
+}
+</style>
 </head>
 
 <body>
@@ -24,7 +47,7 @@ const web = document.getElementById("web");
 intro.addEventListener("ended", () => {
   web.play();
   requestAnimationFrame(() => {
-    web.classList.add("visible");
+    web.style.opacity = "1";
   });
   intro.remove();
 });
