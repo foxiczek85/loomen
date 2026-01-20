@@ -31,6 +31,66 @@ video {
   opacity: 0;
   transition: opacity 600ms ease;
 }
+
+/* kontejner pro obrázky */
+.image-container {
+  position: fixed;
+  bottom: 40px;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 60px;
+  opacity: 0;
+  transition: opacity 800ms ease;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.image-container.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.image-item {
+  width: 180px;
+  height: 180px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform: translateY(30px);
+  opacity: 0;
+  transition: transform 600ms ease, opacity 600ms ease;
+}
+
+.image-container.visible .image-item {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* Zpoždění pro postupný vstup obrázků */
+.image-container.visible .image-item:nth-child(1) {
+  transition-delay: 200ms;
+}
+.image-container.visible .image-item:nth-child(2) {
+  transition-delay: 400ms;
+}
+.image-container.visible .image-item:nth-child(3) {
+  transition-delay: 600ms;
+}
+
+.image-item img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.5));
+  transition: transform 300ms ease;
+}
+
+.image-item img:hover {
+  transform: scale(1.05);
+}
 </style>
 </head>
 
@@ -44,14 +104,33 @@ video {
   <source src="web.mp4" type="video/mp4">
 </video>
 
+<!-- Kontejner pro obrázky -->
+<div class="image-container" id="imageContainer">
+  <div class="image-item">
+    <img src="ukazky/obrazek1.png" alt="Obrázek 1">
+  </div>
+  <div class="image-item">
+    <img src="ukazky/obrazek2.png" alt="Obrázek 2">
+  </div>
+  <div class="image-item">
+    <img src="ukazky/obrazek3.png" alt="Obrázek 3">
+  </div>
+</div>
+
 <script>
 const intro = document.getElementById("intro");
 const web = document.getElementById("web");
+const imageContainer = document.getElementById("imageContainer");
 
 intro.addEventListener("ended", () => {
   web.play();
   web.style.opacity = "1";
   intro.remove();
+  
+  // Zobrazit obrázky s malým zpožděním po přechodu
+  setTimeout(() => {
+    imageContainer.classList.add("visible");
+  }, 500);
 });
 </script>
 
