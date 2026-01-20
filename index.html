@@ -13,7 +13,7 @@ html, body {
   height: 100%;
   background: black;
   overflow: hidden;
-  cursor: pointer; /* Přidáno: kurzor ukazuje, že je vše klikatelné */
+  cursor: pointer;
 }
 
 /* Container pro scrollování */
@@ -25,7 +25,7 @@ html, body {
   height: 100%;
   overflow-y: scroll;
   scroll-behavior: smooth;
-  cursor: pointer; /* Přidáno: kurzor ukazuje, že je vše klikatelné */
+  cursor: pointer;
 }
 
 /* obě videa fullscreen */
@@ -37,7 +37,7 @@ video {
   height: 100%;
   object-fit: cover;
   background: black;
-  cursor: pointer; /* Přidáno: kurzor ukazuje, že je vše klikatelné */
+  cursor: pointer;
 }
 
 /* web video je schované + fade */
@@ -49,18 +49,18 @@ video {
 /* kontejner pro obrázky - ZMĚNA: v dolní části obrazovky */
 .image-container {
   position: absolute;
-  top: 80vh; /* 80% výšky místo 150vh - viditelné bez scrollování */
+  top: 70vh; /* Změněno: 70% místo 80% - obrázky budou výše */
   left: 0;
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 60px;
-  padding: 80px 0;
+  gap: 40px; /* Zmenšen gap aby se vešly větší obrázky */
+  padding: 60px 0;
   opacity: 0;
   pointer-events: none;
   z-index: 10;
-  min-height: 50vh;
+  min-height: 60vh; /* Zvýšeno */
 }
 
 .image-container.visible {
@@ -69,12 +69,12 @@ video {
 }
 
 .image-item {
-  width: 280px; /* VĚTŠŠÍ: 280px místo 220px */
-  height: 280px; /* VĚTŠŠÍ: 280px místo 220px */
+  width: 300px; /* ZVĚTŠENO: 300px místo 280px */
+  height: 300px; /* ZVĚTŠENO: 300px místo 280px */
   display: flex;
   justify-content: center;
   align-items: center;
-  transform: translateY(60px); /* Větší posun */
+  transform: translateY(80px); /* Větší posun pro výraznější animaci */
   opacity: 0;
   transition: transform 700ms ease, opacity 700ms ease;
 }
@@ -98,16 +98,16 @@ video {
 .image-item img {
   width: 100%;
   height: 100%;
-  object-fit: contain;
-  border-radius: 15px;
-  filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.5));
+  object-fit: contain; /* Změněno na 'cover' pro lepší vyplnění */
+  border-radius: 20px; /* ZVĚTŠENO: 20px místo 15px - víc zakulacené */
+  filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.7)); /* Silnější stín */
   transition: transform 400ms ease;
-  transform: scale(1.1); /* VĚTŠÍ SCALE: 1.1 místo 1 */
-  cursor: pointer; /* Přidáno: kurzor ukazuje, že je vše klikatelné */
+  transform: scale(1.2); /* ZVĚTŠENO: 1.2 místo 1.1 */
+  cursor: pointer;
 }
 
 .image-item img:hover {
-  transform: scale(1.18); /* VĚTŠÍ HOVER: 1.18 místo 1.08 */
+  transform: scale(1.3); /* ZVĚTŠENO: 1.3 místo 1.18 */
 }
 
 /* NOVÝ ANIMOVANÝ INDIKÁTOR */
@@ -124,7 +124,7 @@ video {
   opacity: 0;
   transform: translateY(30px);
   transition: transform 700ms ease, opacity 700ms ease;
-  cursor: pointer; /* Přidáno: kurzor ukazuje, že je vše klikatelné */
+  cursor: pointer;
 }
 
 .indicator-container.visible {
@@ -214,6 +214,15 @@ intro.addEventListener("ended", () => {
     imageContainer.classList.add("visible");
     indicatorContainer.classList.add("visible");
     indicatorVisible = true;
+    
+    // Automaticky scrollovat k obrázkům po dalších 500ms
+    setTimeout(() => {
+      scrollContainer.scrollTo({
+        top: imageContainer.offsetTop - 100,
+        behavior: 'smooth'
+      });
+    }, 500);
+    
   }, 800); // 800ms po startu web videa
 });
 
@@ -221,7 +230,7 @@ intro.addEventListener("ended", () => {
 indicatorContainer.addEventListener('click', (e) => {
   e.stopPropagation();
   scrollContainer.scrollTo({
-    top: imageContainer.offsetTop + 100,
+    top: imageContainer.offsetTop - 100,
     behavior: 'smooth'
   });
 });
@@ -232,7 +241,7 @@ document.addEventListener('click', (e) => {
   if (indicatorVisible) {
     // Scrollovat k obrázkům
     scrollContainer.scrollTo({
-      top: imageContainer.offsetTop + 100,
+      top: imageContainer.offsetTop - 100,
       behavior: 'smooth'
     });
   }
@@ -241,9 +250,9 @@ document.addEventListener('click', (e) => {
 // Přidáme také scrollování při kliknutí na samotné obrázky
 imageContainer.addEventListener('click', (e) => {
   if (indicatorVisible) {
-    e.stopPropagation(); // Zabránit dvojímu spuštění
+    e.stopPropagation();
     scrollContainer.scrollTo({
-      top: imageContainer.offsetTop + 100,
+      top: imageContainer.offsetTop - 100,
       behavior: 'smooth'
     });
   }
