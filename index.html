@@ -13,7 +13,7 @@ html, body {
   height: 100%;
   background: black;
   overflow: hidden;
-  cursor: pointer;
+  cursor: pointer; /* Přidáno: kurzor ukazuje, že je vše klikatelné */
 }
 
 /* Container pro scrollování */
@@ -25,7 +25,7 @@ html, body {
   height: 100%;
   overflow-y: scroll;
   scroll-behavior: smooth;
-  cursor: pointer;
+  cursor: pointer; /* Přidáno: kurzor ukazuje, že je vše klikatelné */
 }
 
 /* obě videa fullscreen */
@@ -37,7 +37,7 @@ video {
   height: 100%;
   object-fit: cover;
   background: black;
-  cursor: pointer;
+  cursor: pointer; /* Přidáno: kurzor ukazuje, že je vše klikatelné */
 }
 
 /* web video je schované + fade */
@@ -46,10 +46,10 @@ video {
   transition: opacity 600ms ease;
 }
 
-/* kontejner pro obrázky */
+/* kontejner pro obrázky - ZMĚNA: v dolní části obrazovky */
 .image-container {
   position: absolute;
-  top: 80vh;
+  top: 80vh; /* 80% výšky místo 150vh - viditelné bez scrollování */
   left: 0;
   width: 100%;
   display: flex;
@@ -69,12 +69,12 @@ video {
 }
 
 .image-item {
-  width: 280px;
-  height: 280px;
+  width: 280px; /* VĚTŠŠÍ: 280px místo 220px */
+  height: 280px; /* VĚTŠŠÍ: 280px místo 220px */
   display: flex;
   justify-content: center;
   align-items: center;
-  transform: translateY(60px);
+  transform: translateY(60px); /* Větší posun */
   opacity: 0;
   transition: transform 700ms ease, opacity 700ms ease;
 }
@@ -102,12 +102,12 @@ video {
   border-radius: 15px;
   filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.5));
   transition: transform 400ms ease;
-  transform: scale(1.1);
-  cursor: pointer;
+  transform: scale(1.1); /* VĚTŠÍ SCALE: 1.1 místo 1 */
+  cursor: pointer; /* Přidáno: kurzor ukazuje, že je vše klikatelné */
 }
 
 .image-item img:hover {
-  transform: scale(1.18);
+  transform: scale(1.18); /* VĚTŠÍ HOVER: 1.18 místo 1.08 */
 }
 
 /* NOVÝ ANIMOVANÝ INDIKÁTOR */
@@ -124,7 +124,7 @@ video {
   opacity: 0;
   transform: translateY(30px);
   transition: transform 700ms ease, opacity 700ms ease;
-  cursor: pointer;
+  cursor: pointer; /* Přidáno: kurzor ukazuje, že je vše klikatelné */
 }
 
 .indicator-container.visible {
@@ -214,34 +214,23 @@ intro.addEventListener("ended", () => {
     imageContainer.classList.add("visible");
     indicatorContainer.classList.add("visible");
     indicatorVisible = true;
-  }, 800);
+  }, 800); // 800ms po startu web videa
 });
 
-// Hlavní klikací událost pro CELOU STRÁNKU
+// Automatické scrollování po kliknutí na indikátor
+indicatorContainer.addEventListener('click', (e) => {
+  e.stopPropagation();
+  scrollContainer.scrollTo({
+    top: imageContainer.offsetTop + 100,
+    behavior: 'smooth'
+  });
+});
+
+// Scrollování na obrázky při jakémkoli kliknutí na stránce po zobrazení indikátoru
 document.addEventListener('click', (e) => {
+  // Povolit scrollování pouze když je indikátor viditelný
   if (indicatorVisible) {
-    // Pokud klikneme na indikátor, zastavíme šíření a scrollujeme
-    if (e.target.closest('.indicator-container')) {
-      e.stopPropagation();
-      scrollContainer.scrollTo({
-        top: imageContainer.offsetTop + 100,
-        behavior: 'smooth'
-      });
-    } 
-    // Pokud klikneme na cokoli jiného na stránce (včetně videí, prázdných míst, obrázků)
-    else {
-      scrollContainer.scrollTo({
-        top: imageContainer.offsetTop + 100,
-        behavior: 'smooth'
-      });
-    }
-  }
-});
-
-// Přidáme také scrollování při kliknutí na samotné obrázky pro jistotu
-imageContainer.addEventListener('click', (e) => {
-  if (indicatorVisible) {
-    e.stopPropagation();
+    // Scrollovat k obrázkům
     scrollContainer.scrollTo({
       top: imageContainer.offsetTop + 100,
       behavior: 'smooth'
@@ -249,16 +238,14 @@ imageContainer.addEventListener('click', (e) => {
   }
 });
 
-// Ujistíme se, že i samotné tělo stránky reaguje na kliknutí
-document.body.addEventListener('click', (e) => {
+// Přidáme také scrollování při kliknutí na samotné obrázky
+imageContainer.addEventListener('click', (e) => {
   if (indicatorVisible) {
-    // Pokud to není indikátor nebo obrázek, scrollujeme
-    if (!e.target.closest('.indicator-container') && !e.target.closest('.image-container')) {
-      scrollContainer.scrollTo({
-        top: imageContainer.offsetTop + 100,
-        behavior: 'smooth'
-      });
-    }
+    e.stopPropagation(); // Zabránit dvojímu spuštění
+    scrollContainer.scrollTo({
+      top: imageContainer.offsetTop + 100,
+      behavior: 'smooth'
+    });
   }
 });
 </script>
