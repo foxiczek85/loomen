@@ -43,10 +43,10 @@ video {
   transition: opacity 600ms ease;
 }
 
-/* kontejner pro obrázky */
+/* kontejner pro obrázky - ZMĚNA: v dolní části obrazovky */
 .image-container {
   position: absolute;
-  top: 150vh; /* Začíná až pod oknem - nutí scrollovat */
+  top: 80vh; /* ZMĚNA: 80% výšky místo 150vh - viditelné bez scrollování */
   left: 0;
   width: 100%;
   display: flex;
@@ -58,7 +58,7 @@ video {
   transition: opacity 800ms ease;
   pointer-events: none;
   z-index: 10;
-  min-height: 50vh; /* Zabírá dolní polovinu */
+  min-height: 50vh;
 }
 
 .image-container.visible {
@@ -72,14 +72,10 @@ video {
   display: flex;
   justify-content: center;
   align-items: center;
-  transform: translateY(50px);
+  transform: translateY(30px);
   opacity: 0;
   transition: transform 600ms ease, opacity 600ms ease;
-  border-radius: 20px; /* Zakulacené rohy */
-  overflow: hidden; /* Aby se rohy správně zakulatily */
-  background: rgba(255, 255, 255, 0.1); /* Jemný podklad */
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  /* ODSTRANĚNO: všechny rámečkové styly */
 }
 
 .image-container.visible .image-item {
@@ -99,10 +95,10 @@ video {
 }
 
 .image-item img {
-  width: 85%;
-  height: 85%;
+  width: 100%; /* ZMĚNA: 100% místo 85% - větší obrázky */
+  height: 100%; /* ZMĚNA: 100% místo 85% - větší obrázky */
   object-fit: contain;
-  border-radius: 15px; /* Zakulacené rohy i pro obrázek */
+  border-radius: 15px; /* Zakulacené rohy */
   filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.5));
   transition: transform 400ms ease;
 }
@@ -181,7 +177,7 @@ video {
 
 <!-- Indikátor scrollování -->
 <div class="scroll-indicator" id="scrollIndicator">
-  Scrolluj dolů pro ukázky <span class="arrow">↓</span>
+  Scrolluj dolů pro více <span class="arrow">↓</span>
 </div>
 
 <script>
@@ -206,7 +202,7 @@ intro.addEventListener("ended", () => {
 // Automatické scrollování po kliknutí na indikátor (volitelné)
 scrollIndicator.addEventListener('click', () => {
   scrollContainer.scrollTo({
-    top: imageContainer.offsetTop - window.innerHeight / 2,
+    top: imageContainer.offsetTop + 100, // Trochu více dolů
     behavior: 'smooth'
   });
 });
@@ -215,7 +211,7 @@ scrollIndicator.addEventListener('click', () => {
 document.addEventListener('click', (e) => {
   if (scrollIndicator.classList.contains('visible') && e.target !== scrollIndicator) {
     scrollContainer.scrollTo({
-      top: imageContainer.offsetTop - window.innerHeight / 2,
+      top: imageContainer.offsetTop + 100, // Trochu více dolů
       behavior: 'smooth'
     });
   }
