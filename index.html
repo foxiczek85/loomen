@@ -12,18 +12,17 @@ html, body {
   width: 100%;
   height: 100%;
   background: black;
-  overflow: hidden;
+  overflow: hidden; /* Keep hidden as the images appear automatically */
 }
 
-/* Container pro scrollování */
+/* Container pro scrollování (removed overflow-y: scroll as we don't scroll anymore) */
 .scroll-container {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  overflow-y: scroll;
-  scroll-behavior: smooth;
+  /* overflow-y: scroll; Removed scroll behavior */
 }
 
 /* obě videa fullscreen */
@@ -35,6 +34,7 @@ video {
   height: 100%;
   object-fit: cover;
   background: black;
+  z-index: 0;
 }
 
 /* web video je schované + fade */
@@ -43,118 +43,87 @@ video {
   transition: opacity 600ms ease;
 }
 
-/* kontejner pro obrázky - ZMĚNA: v dolní části obrazovky */
+/* kontejner pro obrázky */
 .image-container {
   position: absolute;
-  top: 80vh; /* 80% výšky místo 150vh - viditelné bez scrollování */
+  top: 50%; /* Center vertically on the screen */
   left: 0;
+  transform: translateY(-50%);
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 60px;
-  padding: 80px 0;
-  opacity: 0;
-  pointer-events: none;
+  padding: 40px 0;
+  opacity: 0; /* Start hidden */
+  pointer-events: none; /* Do not allow interaction until visible */
   z-index: 10;
-  min-height: 50vh;
+  min-height: 40vh;
+  /* Add transition for the container's fade in */
+  transition: opacity 700ms ease;
 }
 
+/* Po aktivaci kontejner vyjede nahoru a zobrazí se */
 .image-container.visible {
   opacity: 1;
   pointer-events: auto;
 }
 
+/* jednotlivé položky */
 .image-item {
-  width: 280px; /* VĚTŠŠÍ: 280px místo 220px */
-  height: 280px; /* VĚTŠŠÍ: 280px místo 220px */
+  width: 250px; /* Increased size (was 220px) */
+  height: 250px; /* Increased size (was 220px) */
   display: flex;
   justify-content: center;
   align-items: center;
-  transform: translateY(60px); /* Větší posun */
+  /* Initial state: moved down and scaled smaller, completely invisible */
+  transform: translateY(40px) scale(0.8);
   opacity: 0;
   transition: transform 700ms ease, opacity 700ms ease;
+  overflow: hidden;
+  background: transparent;
+  border: none;
+  border-radius: 0;
 }
 
+/* Když je kontejner aktivní, položky se odvíjí do plné viditelnosti a velikosti */
 .image-container.visible .image-item {
-  transform: translateY(0);
+  transform: translateY(0) scale(1); /* Animate to original position and full scale */
   opacity: 1;
 }
 
 /* Zpoždění pro postupný vstup obrázků */
 .image-container.visible .image-item:nth-child(1) {
-  transition-delay: 200ms;
+  transition-delay: 100ms; /* Adjust delays as needed to look good */
 }
 .image-container.visible .image-item:nth-child(2) {
-  transition-delay: 400ms;
+  transition-delay: 200ms;
 }
 .image-container.visible .image-item:nth-child(3) {
-  transition-delay: 600ms;
+  transition-delay: 300ms;
 }
 
+/* samotný obrázek */
 .image-item img {
   width: 100%;
   height: 100%;
-  object-fit: contain;
-  border-radius: 15px;
-  filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.5));
+  object-fit: cover;
+  border-radius: 12px;
+  display: block;
   transition: transform 400ms ease;
-  transform: scale(1.1); /* VĚTŠÍ SCALE: 1.1 místo 1 */
+  box-shadow: none;
+  filter: none;
 }
 
 .image-item img:hover {
-  transform: scale(1.18); /* VĚTŠÍ HOVER: 1.18 místo 1.08 */
+  transform: scale(1.04);
 }
 
-/* NOVÝ ANIMOVANÝ INDIKÁTOR */
-.indicator-container {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
-  padding-bottom: 40px;
-  z-index: 20;
-  opacity: 0;
-  transform: translateY(30px);
-  transition: transform 700ms ease, opacity 700ms ease;
-}
-
-.indicator-container.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
+/* Scroll indicator removed as per request */
 .scroll-indicator {
-  color: white;
-  font-family: Arial, sans-serif;
-  font-size: 14px;
-  background: rgba(0, 0, 0, 0.7);
-  padding: 12px 24px;
-  border-radius: 25px;
-  pointer-events: none;
+  display: none !important;
 }
 
-/* Animace šipky */
-.arrow {
-  display: inline-block;
-  margin-left: 8px;
-  animation: bounce 2s infinite;
-}
-
-@keyframes bounce {
-  0%, 20%, 50%, 80%, 100% {
-    transform: translateY(0);
-  }
-  40% {
-    transform: translateY(-5px);
-  }
-  60% {
-    transform: translateY(-3px);
-  }
-}
 </style>
 </head>
 
@@ -183,49 +152,31 @@ video {
   </div>
 </div>
 
-<!-- NOVÝ ANIMOVANÝ INDIKÁTOR -->
-<div class="indicator-container" id="indicatorContainer">
-  <div class="scroll-indicator">
-    Scrolluj dolů pro více <span class="arrow">↓</span>
-  </div>
+<!-- Scroll indicator element is kept in HTML but hidden via CSS -->
+<div class="scroll-indicator" id="scrollIndicator">
+  Scrolluj dolů pro ukázky <span class="arrow">↓</span>
 </div>
 
 <script>
 const intro = document.getElementById("intro");
 const web = document.getElementById("web");
 const imageContainer = document.getElementById("imageContainer");
-const scrollContainer = document.getElementById("scrollContainer");
-const indicatorContainer = document.getElementById("indicatorContainer");
+// const scrollIndicator = document.getElementById("scrollIndicator"); // No longer needed for logic
 
 intro.addEventListener("ended", () => {
   web.play();
   web.style.opacity = "1";
-  intro.remove();
-  
-  // Zobrazit obrázky po 800ms po startu web videa
+  // Optional: remove intro video if desired
+  // intro.remove();
+
+  // The main change: start the image animation 800ms after the web video starts
   setTimeout(() => {
     imageContainer.classList.add("visible");
-    indicatorContainer.classList.add("visible");
-  }, 800); // 800ms po startu web videa
+    // scrollIndicator.classList.add("visible"); // No longer needed
+  }, 800); // Wait 800ms after web video starts
 });
 
-// Automatické scrollování po kliknutí na indikátor
-indicatorContainer.addEventListener('click', () => {
-  scrollContainer.scrollTo({
-    top: imageContainer.offsetTop + 100,
-    behavior: 'smooth'
-  });
-});
-
-// Scrollování na obrázky při jakémkoli kliknutí po zobrazení indikátoru
-document.addEventListener('click', (e) => {
-  if (indicatorContainer.classList.contains('visible') && e.target !== indicatorContainer && !indicatorContainer.contains(e.target)) {
-    scrollContainer.scrollTo({
-      top: imageContainer.offsetTop + 100,
-      behavior: 'smooth'
-    });
-  }
-});
+// Removed all scroll/click interaction event listeners as requested
 </script>
 
 </body>
