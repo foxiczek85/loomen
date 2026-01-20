@@ -13,31 +13,5 @@ video {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  z-index: 1;
-}
-
-#debug {
-  position: fixed;
-  bottom: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(0,0,0,0.6);
-  padding: 6px 10px;
-  border-radius: 8px;
-  font-family: sans-serif;
-  color: #aaa;
-  font-size: 12px;
-  z-index: 10; /* ← TADY */
-}
-
-
-/* web video */
-#web {
-  opacity: 0;
-  transform: translateY(30px); /* ← TADY je správný posun dolů */
-  transition: opacity 600ms ease;
-}
-
-#web.visible {
-  opacity: 1;
+  background: black;
 }
