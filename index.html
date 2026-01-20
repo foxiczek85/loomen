@@ -15,159 +15,90 @@ html, body {
   overflow: hidden;
 }
 
-/* Container pro scrollování */
 .scroll-container {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   overflow-y: scroll;
-  scroll-behavior: smooth;
 }
 
-/* obě videa fullscreen */
+/* fullscreen videa */
 video {
   position: fixed;
-  top: 0;
-  left: 0;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  background: black;
-  z-index: 0;
 }
 
-/* web video je schované + fade */
 #web {
   opacity: 0;
   transition: opacity 600ms ease;
 }
 
-/* kontejner pro obrázky
-   Top nastaven tak, aby byla *část* galerie viditelná ihned (bez scrollu).
-   Po přidání třídy .visible obrázky "vyskočí" do plného stavu a interakce se povolí. */
+/* ===== GALERIE ===== */
+
 .image-container {
   position: absolute;
-  top: 85vh; /* část galerie je viditelná bez scrollu */
-  left: 0;
+  top: 80vh;
   width: 100%;
   display: flex;
   justify-content: center;
-  align-items: center;
-  gap: 60px;
-  padding: 40px 0;
-  /* zpočátku lehce průhledné a posunuté, aby bylo vidět "část" */
-  opacity: 0.6;
-  transition: opacity 800ms ease;
-  pointer-events: none; /* povolíme až po .visible */
+  gap: 80px;
+  padding: 60px 0;
   z-index: 10;
-  min-height: 40vh;
+
+  opacity: 0;
+  transform: translateY(80px);
+  transition:
+    transform 700ms cubic-bezier(.22,.61,.36,1),
+    opacity 700ms ease;
+
+  pointer-events: none;
 }
 
-/* Po aktivaci (např. po skončení intra) se zvýrazní a povolí klikání */
 .image-container.visible {
   opacity: 1;
+  transform: translateY(0);
   pointer-events: auto;
 }
 
-/* jednotlivé položky - bez rámečků, bez pozadí */
 .image-item {
-  width: 220px;
-  height: 220px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transform: translateY(30px); /* počáteční malé posunutí */
-  opacity: 0.6;                  /* částečně viditelné před aktivací */
-  transition: transform 600ms ease, opacity 600ms ease;
-  overflow: hidden;
-  background: transparent; /* odstraněn "rámeček" */
-  border: none;            /* odstraněno */
-  backdrop-filter: none;   /* odstraněn */
-  border-radius: 0;        /* necháme zaoblení pouze na obrázku */
+  width: 300px;
+  height: 300px;
+  opacity: 0;
+  transform: translateY(40px) scale(0.92);
+  transition:
+    opacity 700ms ease,
+    transform 700ms cubic-bezier(.22,.61,.36,1);
 }
 
-/* Když je kontejner aktivní, položky se odvíjí do plné viditelnosti */
 .image-container.visible .image-item {
-  transform: translateY(0);
   opacity: 1;
+  transform: translateY(0) scale(1.05);
 }
 
-/* Zpoždění pro postupný vstup obrázků */
-.image-container.visible .image-item:nth-child(1) {
-  transition-delay: 120ms;
-}
-.image-container.visible .image-item:nth-child(2) {
-  transition-delay: 240ms;
-}
-.image-container.visible .image-item:nth-child(3) {
-  transition-delay: 360ms;
-}
+/* stagger */
+.image-container.visible .image-item:nth-child(1) { transition-delay: 0ms; }
+.image-container.visible .image-item:nth-child(2) { transition-delay: 120ms; }
+.image-container.visible .image-item:nth-child(3) { transition-delay: 240ms; }
 
-/* samotný obrázek - vyplní box, jemné zaoblení, bez stínů/rámečků */
 .image-item img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 12px; /* zaoblení přímo na obrázku */
-  display: block;
-  transition: transform 400ms ease;
-  box-shadow: none; /* žádné drop-shadow */
-  filter: none;
+  border-radius: 14px;
+  transition: transform 300ms ease;
 }
 
 .image-item img:hover {
-  transform: scale(1.04);
-}
-
-/* Indikátor scrollování */
-.scroll-indicator {
-  position: fixed;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  color: white;
-  font-family: Arial, sans-serif;
-  font-size: 14px;
-  opacity: 0;
-  transition: opacity 600ms ease;
-  z-index: 20;
-  background: rgba(0, 0, 0, 0.5);
-  padding: 8px 16px;
-  border-radius: 20px;
-  pointer-events: none;
-}
-
-.scroll-indicator.visible {
-  opacity: 0.9;
-  pointer-events: auto;
-}
-
-/* Animace šipky */
-.arrow {
-  display: inline-block;
-  margin-left: 8px;
-  animation: bounce 2s infinite;
-}
-
-@keyframes bounce {
-  0%, 20%, 50%, 80%, 100% {
-    transform: translateY(0);
-  }
-  40% {
-    transform: translateY(-5px);
-  }
-  60% {
-    transform: translateY(-3px);
-  }
+  transform: scale(1.08);
 }
 </style>
 </head>
 
 <body>
 
-<div class="scroll-container" id="scrollContainer">
+<div class="scroll-container">
   <video id="intro" autoplay muted playsinline>
     <source src="introvid.mp4" type="video/mp4">
   </video>
@@ -176,60 +107,27 @@ video {
     <source src="web.mp4" type="video/mp4">
   </video>
 
-  <!-- Kontejner pro obrázky -->
   <div class="image-container" id="imageContainer">
-    <div class="image-item">
-      <img src="ukazky/obrazek1.png" alt="Obrázek 1">
-    </div>
-    <div class="image-item">
-      <img src="ukazky/obrazek2.png" alt="Obrázek 2">
-    </div>
-    <div class="image-item">
-      <img src="ukazky/obrazek3.png" alt="Obrázek 3">
-    </div>
+    <div class="image-item"><img src="ukazky/obrazek1.png"></div>
+    <div class="image-item"><img src="ukazky/obrazek2.png"></div>
+    <div class="image-item"><img src="ukazky/obrazek3.png"></div>
   </div>
-</div>
-
-<!-- Indikátor scrollování -->
-<div class="scroll-indicator" id="scrollIndicator">
-  Scrolluj dolů pro ukázky <span class="arrow">↓</span>
 </div>
 
 <script>
 const intro = document.getElementById("intro");
 const web = document.getElementById("web");
-const imageContainer = document.getElementById("imageContainer");
-const scrollContainer = document.getElementById("scrollContainer");
-const scrollIndicator = document.getElementById("scrollIndicator");
+const images = document.getElementById("imageContainer");
 
 intro.addEventListener("ended", () => {
   web.play();
   web.style.opacity = "1";
   intro.remove();
 
-  // Po přehrání intra se galerie "odblokuje" a animuje do plného zobrazení
+  // 🔥 animace obrázků 800 ms po STARTU web.mp4
   setTimeout(() => {
-    imageContainer.classList.add("visible");
-    scrollIndicator.classList.add("visible");
-  }, 300);
-});
-
-// Automatické scrollování po kliknutí na indikátor (volitelné)
-scrollIndicator.addEventListener('click', () => {
-  scrollContainer.scrollTo({
-    top: imageContainer.offsetTop - window.innerHeight / 2,
-    behavior: 'smooth'
-  });
-});
-
-// Scrollování na obrázky při jakémkoli kliknutí po zobrazení indikátoru
-document.addEventListener('click', (e) => {
-  if (scrollIndicator.classList.contains('visible') && e.target !== scrollIndicator) {
-    scrollContainer.scrollTo({
-      top: imageContainer.offsetTop - window.innerHeight / 2,
-      behavior: 'smooth'
-    });
-  }
+    images.classList.add("visible");
+  }, 800);
 });
 </script>
 
