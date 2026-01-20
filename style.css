@@ -1,71 +1,28 @@
-* {
+html, body {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
-}
-
-html, body {
   width: 100%;
   height: 100%;
-  background: #0a0a0a;
-  font-family: sans-serif;
-}
-
-/* ===== VIDEO ===== */
-.hero {
-  height: 100vh;
-  width: 100vw;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
+  background: black;
   overflow: hidden;
-
-  /* NESMÍ tu být transform */
-  transform: none;
-  filter: none;
 }
 
-.hero video {
-  /* 1:1 pixel render – žádnej blur */
-  width: 1920px;
-  height: 1080px;
-
-  max-width: none;
-  max-height: none;
-
-  image-rendering: auto;
+video {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: black;
 }
 
-/* ===== CONTENT ===== */
-.content {
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-/* ===== BUTTON ===== */
-.cta {
-  padding: 20px 64px;
-  font-size: 24px;
-  font-weight: 600;
-
-  color: #fff;
-  background: #0066ff;
-  border: none;
-  border-radius: 14px;
-  cursor: pointer;
-
+/* web video */
+#web {
   opacity: 0;
-  transform: translateY(80px);
-  animation: pullup 0.8s cubic-bezier(.2,.8,.2,1) forwards;
+  transform: translateY(30px); /* ← TADY je správný posun dolů */
+  transition: opacity 600ms ease;
 }
 
-@keyframes pullup {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+#web.visible {
+  opacity: 1;
 }
