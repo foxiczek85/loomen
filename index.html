@@ -52,7 +52,7 @@ video {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 80px; /* TROCHU VĚTŠÍ ROZESTUP */
+  gap: 60px;
   padding: 80px 0;
   opacity: 0;
   transition: opacity 800ms ease;
@@ -67,16 +67,19 @@ video {
 }
 
 .image-item {
-  width: 380px; /* VĚTŠÍ než původních 220px */
-  height: 380px; /* VĚTŠÍ než původních 220px */
+  width: 220px;
+  height: 220px;
   display: flex;
   justify-content: center;
   align-items: center;
-  transform: translateY(30px);
+  transform: translateY(50px);
   opacity: 0;
   transition: transform 600ms ease, opacity 600ms ease;
   border-radius: 20px; /* Zakulacené rohy */
   overflow: hidden; /* Aby se rohy správně zakulatily */
+  background: rgba(255, 255, 255, 0.1); /* Jemný podklad */
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .image-container.visible .image-item {
@@ -96,16 +99,16 @@ video {
 }
 
 .image-item img {
-  width: 100%; /* VĚTŠÍ - zabírá celý kontejner */
-  height: 100%; /* VĚTŠÍ - zabírá celý kontejner */
+  width: 85%;
+  height: 85%;
   object-fit: contain;
   border-radius: 15px; /* Zakulacené rohy i pro obrázek */
   filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.5));
-  transition: transform 300ms ease;
+  transition: transform 400ms ease;
 }
 
 .image-item img:hover {
-  transform: scale(1.05);
+  transform: scale(1.08);
 }
 
 /* Indikátor scrollování */
