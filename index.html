@@ -43,7 +43,7 @@ video {
   transition: opacity 600ms ease;
 }
 
-/* kontejner pro obrázky */
+/* kontejner pro obrázky - DOLNÍ POLOVINA OBRAZOVKY */
 .image-container {
   position: absolute;
   top: 150vh; /* Začíná až pod oknem - nutí scrollovat */
@@ -52,13 +52,13 @@ video {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 60px;
-  padding: 80px 0;
+  gap: 100px; /* VĚTŠÍ ROZESTUP mezi obrázky */
+  padding: 120px 0; /* Větší padding */
   opacity: 0;
   transition: opacity 800ms ease;
   pointer-events: none;
   z-index: 10;
-  min-height: 50vh; /* Zabírá dolní polovinu */
+  min-height: 60vh; /* Větší prostor pro obrázky */
 }
 
 .image-container.visible {
@@ -67,19 +67,20 @@ video {
 }
 
 .image-item {
-  width: 220px;
-  height: 220px;
+  width: 440px; /* 2x větší než původních 220px */
+  height: 440px; /* 2x větší než původních 220px */
   display: flex;
   justify-content: center;
   align-items: center;
   transform: translateY(50px);
   opacity: 0;
   transition: transform 600ms ease, opacity 600ms ease;
-  border-radius: 20px; /* Zakulacené rohy */
+  border-radius: 30px; /* Větší zakulacení pro větší obrázky */
   overflow: hidden; /* Aby se rohy správně zakulatily */
   background: rgba(255, 255, 255, 0.1); /* Jemný podklad */
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); /* Silnější stín pro větší obrázky */
 }
 
 .image-container.visible .image-item {
@@ -99,16 +100,16 @@ video {
 }
 
 .image-item img {
-  width: 85%;
-  height: 85%;
+  width: 90%; /* O něco větší obrázky v kontejneru */
+  height: 90%; /* O něco větší obrázky v kontejneru */
   object-fit: contain;
-  border-radius: 15px; /* Zakulacené rohy i pro obrázek */
-  filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.5));
+  border-radius: 20px; /* Větší zakulacení pro větší obrázky */
+  filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.6)); /* Silnější stín */
   transition: transform 400ms ease;
 }
 
 .image-item img:hover {
-  transform: scale(1.08);
+  transform: scale(1.05); /* Jemnější hover efekt pro větší obrázky */
 }
 
 /* Indikátor scrollování */
@@ -119,25 +120,28 @@ video {
   transform: translateX(-50%);
   color: white;
   font-family: Arial, sans-serif;
-  font-size: 14px;
+  font-size: 16px; /* Větší text */
   opacity: 0;
   transition: opacity 800ms ease;
   z-index: 20;
-  background: rgba(0, 0, 0, 0.5);
-  padding: 8px 16px;
-  border-radius: 20px;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 12px 24px; /* Větší padding */
+  border-radius: 25px;
   pointer-events: none;
+  cursor: pointer; /* Ukazuje že je klikací */
 }
 
 .scroll-indicator.visible {
-  opacity: 0.8;
+  opacity: 0.9;
+  pointer-events: auto; /* Povolit klikání */
 }
 
 /* Animace šipky */
 .arrow {
   display: inline-block;
-  margin-left: 8px;
+  margin-left: 10px;
   animation: bounce 2s infinite;
+  font-size: 20px; /* Větší šipka */
 }
 
 @keyframes bounce {
@@ -145,10 +149,42 @@ video {
     transform: translateY(0);
   }
   40% {
-    transform: translateY(-5px);
+    transform: translateY(-8px); /* Větší skok */
   }
   60% {
-    transform: translateY(-3px);
+    transform: translateY(-4px);
+  }
+}
+
+/* Responsivní úpravy pro menší obrazovky */
+@media (max-width: 1600px) {
+  .image-item {
+    width: 380px;
+    height: 380px;
+  }
+  .image-container {
+    gap: 80px;
+  }
+}
+
+@media (max-width: 1400px) {
+  .image-item {
+    width: 350px;
+    height: 350px;
+  }
+  .image-container {
+    gap: 70px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .image-item {
+    width: 320px;
+    height: 320px;
+  }
+  .image-container {
+    gap: 60px;
+    padding: 100px 0;
   }
 }
 </style>
@@ -203,7 +239,7 @@ intro.addEventListener("ended", () => {
   }, 500);
 });
 
-// Automatické scrollování po kliknutí na indikátor (volitelné)
+// Automatické scrollování po kliknutí na indikátor
 scrollIndicator.addEventListener('click', () => {
   scrollContainer.scrollTo({
     top: imageContainer.offsetTop - window.innerHeight / 2,
@@ -213,7 +249,7 @@ scrollIndicator.addEventListener('click', () => {
 
 // Scrollování na obrázky při jakémkoli kliknutí po zobrazení indikátoru
 document.addEventListener('click', (e) => {
-  if (scrollIndicator.classList.contains('visible') && e.target !== scrollIndicator) {
+  if (scrollIndicator.classList.contains('visible') && e.target !== scrollIndicator && !scrollIndicator.contains(e.target)) {
     scrollContainer.scrollTo({
       top: imageContainer.offsetTop - window.innerHeight / 2,
       behavior: 'smooth'
