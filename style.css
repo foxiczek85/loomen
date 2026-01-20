@@ -11,38 +11,42 @@ html, body {
   font-family: sans-serif;
 }
 
-/* === VIDEO SECTION === */
+/* ===== VIDEO ===== */
 .hero {
-  width: 100vw;
   height: 100vh;
+  width: 100vw;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
   overflow: hidden;
 
-  /* KRITICKÉ: žádné transformy */
+  /* NESMÍ tu být transform */
   transform: none;
   filter: none;
-  opacity: 1;
 }
 
 .hero video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  /* 1:1 pixel render – žádnej blur */
+  width: 1920px;
+  height: 1080px;
 
-  /* drží ostrý sampling */
+  max-width: none;
+  max-height: none;
+
   image-rendering: auto;
-  transform: none;
-  backface-visibility: hidden;
 }
 
-/* === CONTENT SECTION === */
+/* ===== CONTENT ===== */
 .content {
   height: 100vh;
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
 }
 
-/* === BUTTON === */
+/* ===== BUTTON ===== */
 .cta {
   padding: 20px 64px;
   font-size: 24px;
