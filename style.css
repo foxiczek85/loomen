@@ -1,4 +1,3 @@
-/* style.css */
 .image-container {
   position: absolute;
   top: 70vh;
@@ -13,6 +12,11 @@
   pointer-events: none;
   z-index: 10;
   min-height: 50vh;
+}
+
+.image-container.visible {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .image-item {
@@ -46,25 +50,5 @@
 }
 
 .image-item:hover img {
-  transform: scale(1.3);
-}
-
-/* Video pozice - stejná jako obrázek */
-.hover-video {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  border-radius: 20px;
-  filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.7));
-  z-index: 20;
-  pointer-events: none;
-  transform: scale(1.2);
-  transition: transform 400ms ease;
-}
-
-.image-item:hover .hover-video {
   transform: scale(1.3);
 }
