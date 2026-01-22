@@ -1,70 +1,90 @@
-* { box-sizing: border-box; }
-
-body {
+/* ===============================
+   ABSOLUTNÍ RESET
+   =============================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
   margin: 0;
-  background: #0b0b0b;
+  padding: 0;
 }
 
+/* ===============================
+   BODY
+   =============================== */
+body {
+  background: #0b0b0b;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+/* ===============================
+   GALLERY
+   =============================== */
 .gallery {
   display: flex;
   gap: 24px;
   padding: 40px;
 }
 
-/* TADY JE KLÍČ – žádných 300x300 */
+/* ===============================
+   ITEM – NATVRDO 9:16
+   =============================== */
 .item {
-  width: 240px;
-  aspect-ratio: 9 / 16;
+  width: 240px !important;
+  aspect-ratio: 9 / 16 !important;
+  height: auto !important;
+
   position: relative;
   overflow: hidden;
+
   border-radius: 20px;
   background: #111;
 }
 
-/* image */
+/* ===============================
+   IMAGE
+   =============================== */
 .item img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: opacity .2s, transform .3s;
-}
-
-.item:hover img {
-  opacity: .15;
-  transform: scale(1.1);
-}
-
-/* video – ZABITÝ DEFAULT 300x150 */
-.hoverVideo {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  pointer-events: none;
-}
-/* TOTAL NUCLEAR FIX – ZÁKAZ ČTVERCE */
-.item,
-.image-item,
-.item img,
-.image-item img,
-.hoverVideo,
-video {
-  width: auto !important;
-  height: auto !important;
-}
-
-.item,
-.image-item {
-  width: 240px !important;
-  aspect-ratio: 9 / 16 !important;
-}
-
-.item img,
-.image-item img,
-.hoverVideo,
-video {
   width: 100% !important;
   height: 100% !important;
   object-fit: cover !important;
+
+  transition: opacity 0.2s ease, transform 0.3s ease;
+}
+
+.item:hover img {
+  opacity: 0.15;
+  transform: scale(1.08);
+}
+
+/* ===============================
+   VIDEO – ZNIČENÝ DEFAULT 300x150
+   =============================== */
+.hoverVideo,
+.item video {
+  position: absolute;
+  inset: 0;
+
+  width: 100% !important;
+  height: 100% !important;
+
+  object-fit: cover !important;
+  pointer-events: none;
+
+  border-radius: 20px;
+}
+
+/* ===============================
+   NUCLEAR OVERRIDE
+   (kdyby tam furt lezl čtverec)
+   =============================== */
+video,
+img,
+.item,
+.gallery > * {
+  max-width: none !important;
+  max-height: none !important;
 }
