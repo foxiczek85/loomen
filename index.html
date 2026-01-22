@@ -76,14 +76,15 @@ video {
   opacity: 1;
 }
 
-/* Hover video - přesně na obrázku */
+/* Hover video - přesně na obrázku, s rozlišením 1080x1920, oříznuto k coveru */
 .hover-video {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
+  object-position: center;
   border-radius: 20px;
   filter: drop-shadow(0 8px 20px rgba(0,0,0,0.7));
   z-index: 20;
@@ -197,10 +198,9 @@ scrollContainer.addEventListener("scroll", () => {
   }
 });
 
-/* Hover videos - vylepšené */
+/* Hover videos - vytvoření a odstranění */
 document.querySelectorAll(".image-item").forEach((item, i) => {
   let hv = null;
-  const img = item.querySelector('img');
 
   item.addEventListener("mouseenter", () => {
     if (hv) return;
@@ -211,21 +211,6 @@ document.querySelectorAll(".image-item").forEach((item, i) => {
     hv.muted = true;
     hv.loop = true;
     hv.className = "hover-video";
-    
-    // Přesně na obrázku
-    hv.style.position = "absolute";
-    hv.style.top = "0";
-    hv.style.left = "0";
-    hv.style.width = "100%";
-    hv.style.height = "100%";
-    hv.style.objectFit = "contain";
-    hv.style.borderRadius = "20px";
-    hv.style.filter = "drop-shadow(0 8px 20px rgba(0,0,0,0.7))";
-    hv.style.transform = window.getComputedStyle(img).transform;
-    hv.style.transition = "transform 400ms ease";
-    hv.style.zIndex = "20";
-    hv.style.pointerEvents = "none";
-    
     item.appendChild(hv);
   });
 
