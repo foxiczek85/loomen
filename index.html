@@ -2,35 +2,47 @@
 <html lang="cs">
 <head>
   <meta charset="UTF-8">
-  <title>Hover video 9:16</title>
+  <title>Hover video 9:16 – NO SQUARE</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <div class="gallery">
-  <div class="item"><img src="img1.jpg"></div>
-  <div class="item"><img src="img2.jpg"></div>
-  <div class="item"><img src="img3.jpg"></div>
+  <div class="item">
+    <img src="img1.jpg" alt="">
+  </div>
+  <div class="item">
+    <img src="img2.jpg" alt="">
+  </div>
+  <div class="item">
+    <img src="img3.jpg" alt="">
+  </div>
 </div>
 
 <script>
 document.querySelectorAll(".item").forEach((el, i) => {
-  let v;
+  let v = null;
 
   el.addEventListener("mouseenter", () => {
     if (v) return;
+
     v = document.createElement("video");
-    v.src = `video${i+1}.mp4`;
+    v.src = `video${i + 1}.mp4`;
     v.muted = true;
     v.loop = true;
     v.autoplay = true;
     v.playsInline = true;
     v.className = "hoverVideo";
+
     el.appendChild(v);
+    v.play().catch(() => {});
   });
 
   el.addEventListener("mouseleave", () => {
-    if (v) { v.remove(); v = null; }
+    if (v) {
+      v.remove();
+      v = null;
+    }
   });
 });
 </script>
