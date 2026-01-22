@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Web</title>
+<link rel="stylesheet" href="style.css">
 
 <style>
 html, body {
@@ -75,30 +76,24 @@ video {
   opacity: 1;
 }
 
-.image-item img {
+/* Hover video - přesně na obrázku */
+.hover-video {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   object-fit: contain;
   border-radius: 20px;
   filter: drop-shadow(0 8px 20px rgba(0,0,0,0.7));
+  z-index: 20;
+  pointer-events: none;
   transform: scale(1.2);
   transition: transform 400ms ease;
 }
 
-.image-item img:hover {
+.image-item:hover .hover-video {
   transform: scale(1.3);
-}
-
-/* Hover video */
-.hover-video {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 20px;
-  z-index: 20;
-  pointer-events: none;
 }
 
 /* Indicator */
@@ -154,9 +149,15 @@ video {
   </video>
 
   <div class="image-container" id="imageContainer">
-    <div class="image-item"><img src="ukazky/obrazek1.png"></div>
-    <div class="image-item"><img src="ukazky/obrazek2.png"></div>
-    <div class="image-item"><img src="ukazky/obrazek3.png"></div>
+    <div class="image-item">
+      <img src="ukazky/obrazek1.png">
+    </div>
+    <div class="image-item">
+      <img src="ukazky/obrazek2.png">
+    </div>
+    <div class="image-item">
+      <img src="ukazky/obrazek3.png">
+    </div>
   </div>
 
 </div>
@@ -196,17 +197,35 @@ scrollContainer.addEventListener("scroll", () => {
   }
 });
 
-/* Hover videos */
+/* Hover videos - vylepšené */
 document.querySelectorAll(".image-item").forEach((item, i) => {
-  let hv;
+  let hv = null;
+  const img = item.querySelector('img');
 
   item.addEventListener("mouseenter", () => {
+    if (hv) return;
+    
     hv = document.createElement("video");
     hv.src = `ukazky/video${i + 1}.mp4`;
     hv.autoplay = true;
     hv.muted = true;
     hv.loop = true;
     hv.className = "hover-video";
+    
+    // Přesně na obrázku
+    hv.style.position = "absolute";
+    hv.style.top = "0";
+    hv.style.left = "0";
+    hv.style.width = "100%";
+    hv.style.height = "100%";
+    hv.style.objectFit = "contain";
+    hv.style.borderRadius = "20px";
+    hv.style.filter = "drop-shadow(0 8px 20px rgba(0,0,0,0.7))";
+    hv.style.transform = window.getComputedStyle(img).transform;
+    hv.style.transition = "transform 400ms ease";
+    hv.style.zIndex = "20";
+    hv.style.pointerEvents = "none";
+    
     item.appendChild(hv);
   });
 
