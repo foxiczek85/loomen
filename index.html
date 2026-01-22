@@ -77,36 +77,37 @@ video {
   opacity: 1;
 }
 
-/* Obrázek i video mají stejný zoom efekt */
-.image-content {
+/* Obrázky - object-fit: contain */
+.image-item img {
   width: 100%;
   height: 100%;
+  object-fit: contain;
   border-radius: 20px;
   filter: drop-shadow(0 8px 20px rgba(0,0,0,0.7));
   transform: scale(1.2);
   transition: transform 400ms ease;
 }
 
-/* Obrázky použijí contain, videa cover */
-.image-item img.image-content {
-  object-fit: contain;
-}
-
-.image-item .hover-video {
-  object-fit: cover;
-}
-
-.image-item:hover .image-content {
-  transform: scale(1.3);
-}
-
-/* Video je nad obrázkem */
+/* Video - object-fit: cover pro 1080x1920 */
 .hover-video {
   position: absolute;
   top: 0;
   left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 20px;
+  filter: drop-shadow(0 8px 20px rgba(0,0,0,0.7));
+  transform: scale(1.2);
+  transition: transform 400ms ease;
   z-index: 20;
   pointer-events: none;
+}
+
+/* Zoom efekt při hoveru */
+.image-item:hover img,
+.image-item:hover .hover-video {
+  transform: scale(1.3);
 }
 
 /* Indicator */
@@ -163,13 +164,13 @@ video {
 
   <div class="image-container" id="imageContainer">
     <div class="image-item">
-      <img class="image-content" src="ukazky/obrazek1.png">
+      <img src="ukazky/obrazek1.png">
     </div>
     <div class="image-item">
-      <img class="image-content" src="ukazky/obrazek2.png">
+      <img src="ukazky/obrazek2.png">
     </div>
     <div class="image-item">
-      <img class="image-content" src="ukazky/obrazek3.png">
+      <img src="ukazky/obrazek3.png">
     </div>
   </div>
 
@@ -213,7 +214,6 @@ scrollContainer.addEventListener("scroll", () => {
 /* Hover videos - 1080x1920 s object-fit: cover */
 document.querySelectorAll(".image-item").forEach((item, i) => {
   let hv = null;
-  const img = item.querySelector('img');
 
   item.addEventListener("mouseenter", () => {
     if (hv) return;
@@ -223,12 +223,7 @@ document.querySelectorAll(".image-item").forEach((item, i) => {
     hv.autoplay = true;
     hv.muted = true;
     hv.loop = true;
-    hv.className = "image-content hover-video";
-    
-    // Nastavení pro 1080x1920 video
-    hv.style.objectFit = "cover";
-    hv.style.transform = window.getComputedStyle(img).transform;
-    hv.style.transition = "transform 400ms ease";
+    hv.className = "hover-video";
     
     item.appendChild(hv);
   });
