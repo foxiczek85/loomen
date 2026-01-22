@@ -85,11 +85,15 @@ video {
   filter: drop-shadow(0 8px 20px rgba(0,0,0,0.7));
   transform: scale(1.2);
   transition: transform 400ms ease;
-  object-fit: cover;
 }
 
+/* Obrázky použijí contain, videa cover */
 .image-item img.image-content {
   object-fit: contain;
+}
+
+.image-item .hover-video {
+  object-fit: cover;
 }
 
 .image-item:hover .image-content {
@@ -206,7 +210,7 @@ scrollContainer.addEventListener("scroll", () => {
   }
 });
 
-/* Hover videos - s identickým zoom efektem */
+/* Hover videos - 1080x1920 s object-fit: cover */
 document.querySelectorAll(".image-item").forEach((item, i) => {
   let hv = null;
   const img = item.querySelector('img');
@@ -220,6 +224,11 @@ document.querySelectorAll(".image-item").forEach((item, i) => {
     hv.muted = true;
     hv.loop = true;
     hv.className = "image-content hover-video";
+    
+    // Nastavení pro 1080x1920 video
+    hv.style.objectFit = "cover";
+    hv.style.transform = window.getComputedStyle(img).transform;
+    hv.style.transition = "transform 400ms ease";
     
     item.appendChild(hv);
   });
