@@ -1,17 +1,13 @@
-/* ===============================
-   ABSOLUTNÍ RESET
-   =============================== */
+/* ===== TOTAL RESET ===== */
 *,
 *::before,
 *::after {
-  box-sizing: border-box;
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
-/* ===============================
-   BODY
-   =============================== */
+/* ===== BODY ===== */
 body {
   background: #0b0b0b;
   min-height: 100vh;
@@ -20,18 +16,14 @@ body {
   align-items: flex-start;
 }
 
-/* ===============================
-   GALLERY
-   =============================== */
+/* ===== GALLERY ===== */
 .gallery {
   display: flex;
   gap: 24px;
   padding: 40px;
 }
 
-/* ===============================
-   ITEM – NATVRDO 9:16
-   =============================== */
+/* ===== ITEM – NATVRDO 9:16 ===== */
 .item {
   width: 240px !important;
   aspect-ratio: 9 / 16 !important;
@@ -39,30 +31,24 @@ body {
 
   position: relative;
   overflow: hidden;
-
   border-radius: 20px;
   background: #111;
 }
 
-/* ===============================
-   IMAGE
-   =============================== */
+/* ===== IMAGE ===== */
 .item img {
   width: 100% !important;
   height: 100% !important;
   object-fit: cover !important;
-
-  transition: opacity 0.2s ease, transform 0.3s ease;
+  transition: opacity .2s ease, transform .3s ease;
 }
 
 .item:hover img {
   opacity: 0.15;
-  transform: scale(1.08);
+  transform: scale(1.1);
 }
 
-/* ===============================
-   VIDEO – ZNIČENÝ DEFAULT 300x150
-   =============================== */
+/* ===== VIDEO – ZABITÝ DEFAULT 300x150 ===== */
 .hoverVideo,
 .item video {
   position: absolute;
@@ -73,14 +59,10 @@ body {
 
   object-fit: cover !important;
   pointer-events: none;
-
   border-radius: 20px;
 }
 
-/* ===============================
-   NUCLEAR OVERRIDE
-   (kdyby tam furt lezl čtverec)
-   =============================== */
+/* ===== NUCLEAR KILL SWITCH ===== */
 video,
 img,
 .item,
